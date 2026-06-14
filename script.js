@@ -120,3 +120,35 @@ request.onsuccess = (e) => {
     db = e.target.result; 
     updateFileCount(); 
 };
+async function handleZipUpload(input) {
+    const file = input.files;
+    if (!file) return;
+
+    const statusDiv = document.getElementById('status');
+    statusDiv.innerText = "Zip ဖိုင်ကို စတင်ဖြည်နေပြီ...";
+
+    const zip = await JSZip.loadAsync(file);
+    const store = db.transaction(["files"], "readwrite").objectStore("files");
+    
+    let count = 0;
+    
+    // Zip ထဲက ဖိုင်အားလုံးကို loop ပတ်မယ်
+    for (let filename in zip.files) {
+        let zipEntry = zip.files[filename];
+        
+        // ဖိုင်ဟုတ်ပြီး .json နဲ့ ဆုံးတာကိုပဲ ဖတ်မယ်
+        if (!zipEntry.dir && filename.endsWith(".json")) {
+            const content = await zipEntry.async("string");
+            try {
+                const data = JSON.parse(content);
+                store.put({ name: filename, history: data });
+                count++;
+            } catch (e) {
+                console.log("ဖိုင်ဖတ်မရသောဖိုင် - " + filename);
+            }
+        }
+    }
+    
+    statusDiv.innerText = `အောင်မြင်စွာ ဖတ်ပြီးပါပြီ။ စုစုပေါင်း JSON ဖိုင် - ${count} ခု။`;
+    updateFileCount(); // အရေအတွက်ကို ပြန်ပြမယ်
+}
