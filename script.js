@@ -9,6 +9,7 @@ function addResult(result) {
     }
 
     let pattern = history.slice(-currentStep); 
+    // ဒီနေရာမှာ သင့်ရဲ့ Pattern logic အတိုင်း ခန့်မှန်းချက် ထုတ်ပေးပါမယ်
     let prediction = (pattern.length > 0 && pattern[pattern.length-1] === 'B') ? 'P' : 'B';
     document.getElementById('prediction').innerText = "ခန့်မှန်းချက်: " + prediction;
 
