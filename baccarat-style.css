@@ -1,0 +1,76 @@
+:root {
+    --bg-main: #0b0f19;
+    --bg-card: rgba(20, 27, 45, 0.7);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --color-player: #3b82f6;
+    --color-banker: #ef4444;
+    --color-tie: #10b981;
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+header { background: rgba(11, 15, 25, 0.8); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-glass); text-align: center; }
+header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.5px; background: linear-gradient(to right, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.container { display: flex; flex-direction: column; flex: 1; padding: 15px; gap: 15px; max-width: 1400px; margin: 0 auto; width: 100%; }
+
+.sidebar { background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-glass); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+.sidebar h2 { font-size: 1.2rem; margin-bottom: 5px; color: var(--text-main); }
+.file-info { font-size: 0.9rem; color: var(--text-muted); }
+
+.upload-zone { border: 2px dashed rgba(59, 130, 246, 0.4); border-radius: 12px; padding: 30px 15px; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(59, 130, 246, 0.02); }
+.upload-zone:hover { border-color: var(--color-player); background: rgba(59, 130, 246, 0.05); }
+.upload-zone p { font-size: 0.95rem; color: var(--text-main); }
+.upload-zone span { font-size: 0.8rem; color: var(--text-muted); display: block; margin-top: 5px; }
+#fileInput { display: none; }
+
+.progress-container { display: none; background: rgba(255,255,255,0.05); border-radius: 10px; height: 8px; overflow: hidden; width: 100%; position: relative; }
+.progress-bar { background: var(--color-tie); height: 100%; width: 0%; transition: width 0.1s; }
+.btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--text-main); padding: 12px; border-radius: 10px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.95rem; }
+.btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+.btn-primary { background: var(--color-player); border: none; }
+.btn-primary:hover { background: #2563eb; }
+.btn-reset { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #f87171; }
+.btn-reset:hover { background: rgba(239, 68, 68, 0.2); }
+
+.main-content { display: flex; flex-direction: column; gap: 15px; flex: 1; }
+.grid-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.stat-card { background: var(--bg-card); border: 1px solid var(--border-glass); padding: 15px; border-radius: 12px; text-align: center; }
+.stat-card p { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
+.stat-card h3 { font-size: 1.4rem; font-weight: 600; }
+
+.display-card { background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; align-items: center; text-align: center; min-height: 220px; justify-content: center; position: relative; overflow: hidden; }
+.step-badge { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.07); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--border-glass); }
+.status-msg { position: absolute; top: 15px; right: 15px; font-size: 0.8rem; color: var(--color-tie); font-weight: 500; }
+
+.prediction-title { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px; }
+.prediction-output { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; letter-spacing: 1px; }
+.prediction-output.PLAYER { color: var(--color-player); text-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+.prediction-output.BANKER { color: var(--color-banker); text-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+.prediction-output.WAIT { color: var(--text-muted); }
+
+.meta-info { display: flex; gap: 20px; font-size: 0.85rem; background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-glass); }
+.meta-info span strong { color: #fff; }
+
+.alert-banner { display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid var(--color-banker); color: #f87171; padding: 12px; border-radius: 10px; font-size: 0.85rem; font-weight: 500; text-align: center; }
+
+.action-card { background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+.action-card h3 { font-size: 1rem; color: var(--text-muted); text-align: center; }
+.game-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.btn-game { border: none; padding: 18px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: transform 0.1s, opacity 0.2s; color: #fff; }
+.btn-game:active { transform: scale(0.96); }
+.btn-p { background: var(--color-player); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
+.btn-b { background: var(--color-banker); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+.btn-t { background: var(--color-tie); box-shadow: 0 4px 15px rgba(16, 119, 129, 0.3); }
+
+.trend-tracker { background: rgba(0,0,0,0.15); border: 1px solid var(--border-glass); border-radius: 10px; padding: 12px; min-height: 50px; display: flex; gap: 6px; overflow-x: auto; align-items: center; }
+.bead { width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+.bead.P { background: var(--color-player); }
+.bead.B { background: var(--color-banker); }
+.bead.T { background: var(--color-tie); }
+
+@media (min-width: 768px) {
+    .cont
