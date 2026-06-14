@@ -2,18 +2,28 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <link rel="stylesheet" href="baccarat-style.css">
 </head>
 <body>
     <div class="container">
         <h2>Baccarat Predictor</h2>
         <div id="prediction" class="predict-box">ခန့်မှန်းချက်...</div>
+        
+        <input type="file" id="zipInput" onchange="handleZipUpload(this.files)">
+        <button onclick="trainAllData()">JSON/Live အကုန် Train မယ်</button>
+
         <div class="btn-group">
             <button class="btn btn-player" onclick="addResult('P')">PLAYER</button>
             <button class="btn btn-banker" onclick="addResult('B')">BANKER</button>
             <button class="btn btn-tie" onclick="addResult('T')">TIE</button>
         </div>
-        <button onclick="saveResults()" style="width:100%; padding:15px; margin-top:10px;">Save Data</button>
+
+        <div style="margin-top: 15px;">
+            <button onclick="undoLast()">နောက်ဆုံးတစ်ခု ပြန်ဖျက်</button>
+            <button onclick="resetGame()">ဝိုင်းသစ်စ</button>
+            <button onclick="saveResults()">Save Data</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
