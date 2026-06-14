@@ -62,3 +62,23 @@ function saveResults() {
     a.click();
 }
 function trainAllData() { alert("Database ထဲတွင် အသင့်ရှိနေပါသည်။"); }
+async function handleZipUpload(files) {
+    const statusDiv = document.getElementById('status');
+    statusDiv.innerText = "ဖိုင်များ စတင်ဖတ်နေပါပြီ...";
+    
+    const zip = await JSZip.loadAsync(files);
+    const store = db.transaction(["files"], "readwrite").objectStore("files");
+    
+    let count = 0;
+    let totalFiles = Object.keys(zip.files).filter(name => name.endsWith(".json")).length;
+
+    for (let filename in zip.files) {
+        if (filename.endsWith(".json")) {
+            const content = await zip.files[filename].async("string");
+            store.put({ name: filename, history: JSON.parse(content) });
+            count++;
+            statusDiv.innerText = `ဖိုင် ${count} / ${totalFiles} ဖတ်ပြီးပါပြီ။`;
+        }
+    }
+    statusDiv.innerText = `အောင်မြင်စွာ Train ပြီးပါပြီ။ စုစုပေါင်းဖိုင် - ${count} ခု။`;
+}
