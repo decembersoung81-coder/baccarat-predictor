@@ -6,8 +6,8 @@
     <title>Advanced Baccarat Predictor AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="baccarat-style.css">
 </head>
 <body>
 
@@ -17,73 +17,73 @@
 
     <div class="container">
         <div class="sidebar">
-            <div>
-                <h2>ဒေတာ စီမံခန့်ခွဲမှု</h2>
-                <div class="file-info" id="jsonCount">JSON Files: 0</div>
-            </div>
+            <h2>ဒေတာ စီမံခန့်ခွဲမှု</h2>
+            <p class="file-info">ဖော်မြူလာတွက်ချက်ရန် CSV သို့မဟုတ် TXT ဖိုင်ကို ထည့်သွင်းပေးပါ။</p>
             
-            <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-                <p>JSON ဖိုင်များကို ဤနေရာတွင် ချလိုက်ပါ သို့မဟုတ် ဘရောက်ပါ</p>
-                <span>.json ဖိုင်များ (အကန့်အသတ်မရှိ တင်နိုင်သည်)</span>
-                <input type="file" id="fileInput" accept=".json" multiple onchange="handleFileUpload(this.files)">
+            <div class="upload-zone" id="dropZone">
+                <p>ဖိုင်ကို ဤနေရာသို့ ဆွဲထည့်ပါ သို့မဟုတ် နှိပ်၍ ရွေးချယ်ပါ</p>
+                <span>(ထောက်ခံထားသောဖိုင်များ: .csv, .txt)</span>
+                <input type="file" id="fileInput" accept=".csv, .txt">
             </div>
 
             <div class="progress-container" id="progressContainer">
                 <div class="progress-bar" id="progressBar"></div>
             </div>
 
-            <button class="btn btn-primary" onclick="alert('မော်ဒယ်ကို သမိုင်းဝင်ဒေတာများနှင့် အောင်မြင်စွာ ထပ်မံလေ့ကျင့်ပေးပြီးပါပြီ။')">Train All Models</button>
-            <button class="btn" onclick="exportDataset()">Export Dataset (.json)</button>
-            <button class="btn btn-reset" onclick="resetRound()">New Round / Reset</button>
+            <button class="btn btn-primary" id="btnUpload" style="width: 100%;">
+                ဒေတာဖိုင် ဖတ်ခိုင်းမည်
+            </button>
+            
+            <button class="btn btn-reset" id="btnReset" style="width: 100%;">
+                ဒေတာအသစ် ပြန်စမည်
+            </button>
         </div>
 
         <div class="main-content">
             <div class="grid-stats">
                 <div class="stat-card">
-                    <p>Win Rate</p>
-                    <h3 id="statWinRate">0%</h3>
+                    <p>စုစုပေါင်းပွဲ</p>
+                    <h3 id="statTotal">0</h3>
                 </div>
-                <div class="stat-card">
-                    <p>Total Wins</p>
-                    <h3 id="statWins" style="color: var(--color-tie)">0</h3>
+                <div class="stat-card" style="border-bottom: 3px solid #3b82f6;">
+                    <p>Player နိုင်ပွဲ</p>
+                    <h3 id="statPlayer" style="color: #3b82f6;">0</h3>
                 </div>
-                <div class="stat-card">
-                    <p>Total Losses</p>
-                    <h3 id="statLosses" style="color: var(--color-banker)">0</h3>
+                <div class="stat-card" style="border-bottom: 3px solid #ef4444;">
+                    <p>Banker နိုင်ပွဲ</p>
+                    <h3 id="statBanker" style="color: #ef4444;">0</h3>
                 </div>
-                <div class="stat-card">
-                    <p>Current Streak</p>
-                    <h3 id="statStreak">0</h3>
+                <div class="stat-card" style="border-bottom: 3px solid #10b981;">
+                    <p>Tie (သရေ)</p>
+                    <h3 id="statTie" style="color: #10b981;">0</h3>
+                </div>
+            </div>
+
+            <div class="display-card">
+                <div class="step-badge" id="stepBadge">ပွဲစဉ် #0</div>
+                <div class="status-msg" id="statusMsg">စနစ်အသင့်ဖြစ်ပါပြီ</div>
+                
+                <p class="prediction-title">နောက်တစ်ပွဲ AI ခန့်မှန်းချက်</p>
+                <div class="prediction-output WAIT" id="predictionText">WAIT</div>
+                
+                <div class="meta-info">
+                    <span>မှန်ကန်မှုနှုန်း: <strong id="accuracyRate">0%</strong></span>
+                    <span>လက်ရှိ Trend: <strong id="trendText">ပုံမှန်</strong></span>
                 </div>
             </div>
 
             <div class="alert-banner" id="alertBanner">
-                ⚠️ သတိပေးချက်: ဆက်တိုက် ၉ ကြိမ်ရှုံးနိုင်ခြေရှိသော Pattern ပုံစံမျိုး တွေ့ရှိနေရပါသည်။ သတိထားကစားပါ။
-            </div>
-
-            <div class="display-card">
-                <div class="step-badge" id="stepBadge">STEP: 1</div>
-                <div class="status-msg" id="statusMsg">Ready for calculation</div>
-                
-                <div class="prediction-title">AI NEXT PREDICTION</div>
-                <div class="prediction-output WAIT" id="predOutput">WAIT</div>
-                
-                <div class="meta-info">
-                    <span>Confidence: <strong id="predConf">0%</strong></span>
-                    <span>Trend: <strong id="predTrend">-</strong></span>
-                </div>
+                ⚠️ သတိပေးချက်- ပုံစံမမှန်သော ဒေတာများကို ကျော်ဖြတ်ခဲ့သည်။ ဖိုင်ကို ပြန်စစ်ပေးပါ။
             </div>
 
             <div class="action-card">
-                <h3>LIVE ရလဒ်များ ထည့်သွင်းရန်</h3>
+                <h3>LIVE ရလဒ်များ တိုက်ရိုက်ထည့်သွင်းရန်</h3>
                 <div class="game-buttons">
-                    <button class="btn-game btn-p" onclick="addLiveResult('PLAYER')">P</button>
-                    <button class="btn-game btn-t" onclick="addLiveResult('TIE')">T</button>
-                    <button class="btn-game btn-b" onclick="addLiveResult('BANKER')">B</button>
+                    <button class="btn-game btn-p" id="addP">PLAYER</button>
+                    <button class="btn-game btn-b" id="addB">BANKER</button>
+                    <button class="btn-game btn-t" id="addT">TIE</button>
                 </div>
-                
-                <div class="trend-tracker" id="trendTracker">
-                    </div>
+                <div class="trend-tracker" id="beadPlate"></div>
             </div>
         </div>
     </div>
